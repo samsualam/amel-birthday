@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Pendo!</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+            overflow: hidden;
+            transition: background 0.5s ease;
+        }
+        .section {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            max-width: 600px;
+            position: relative;
+            z-index: 10;
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        h1 {
+            font-size: 4em;
+            color: #ffd700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .message {
+            font-size: 1.5em;
+            margin: 20px 0;
+            min-height: 60px;
+        }
+        .balloons {
+            font-size: 3em;
+            cursor: pointer;
+            display: inline-block;
+            margin: 10px;
+            transition: transform 0.3s ease;
+        }
+        .balloons:hover {
+            transform: scale(1.2);
+        }
+        .balloon {
+            animation: float 3s ease-in-out infinite;
+        }
+        .balloon:nth-child(2) { animation-delay: -1s; }
+        .balloon:nth-child(3) { animation-delay: -2s; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #ffd700;
+            animation: fall 3s linear infinite;
+        }
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        .question {
+            margin: 20px 0;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .option {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .option:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .moving-button {
+            background: #ff69b4;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1.5em;
+            cursor: pointer;
+            position: absolute;
+            transition: all 0.1s ease;
+        }
+        .moving-button:hover {
+            background: #ff1493;
+        }
+        .next-button {
+            background: #32cd32;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1.5em;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .next-button:hover {
+            background: #228b22;
+        }
+        .warning-message {
+            color: #ff0000;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 3em; }
+            .section { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Intro Section -->
+    <div id="intro" class="section active">
+        <h1>Selamat Datang di Petualangan Ulang Tahun Pendo!</h1>
+        <p class="message">Untuk mencapai kejutan ulang tahun, Anda harus menyelesaikan beberapa tantangan menyenangkan. Siap untuk memulai?</p>
+        <button class="next-button" onclick="nextStep('step1')">Mulai Petualangan</button>
+    </div>
+
+    <!-- Step 1: Question Game -->
+    <div id="step1" class="section">
+        <h1>Langkah 1: Kuis Ulang Tahun</h1>
+        <p class="question">Hari apa ulang tahun Pendo?</p>
+        <div class="options">
+            <button class="option" onclick="checkAnswer('Monday')">Senin</button>
+            <button class="option" onclick="checkAnswer('Tuesday')">Selasa</button>
+            <button class="option" onclick="checkAnswer('Wednesday')">Rabu</button>
+            <button class="option" onclick="checkAnswer('Thursday')">Kamis</button>
+        </div>
+    </div>
+
+    <!-- Step 2: Moving Button Game -->
+    <div id="step2" class="section">
+        <h1>Langkah 2: Tangkap Tombol!</h1>
+        <p class="message">Klik tombol untuk melanjutkan, tetapi tombol bergerak saat Anda mencoba menangkapnya!</p>
+        <button id="movingBtn" class="moving-button" onclick="nextStep('main')">Klik Saya!</button>
+    </div>
+
+    <!-- Main Birthday Page -->
+    <div id="main" class="section">
+        <div class="balloons">
+            <span class="balloon balloon1">🎈</span>
+            <span class="balloon balloon2">🎉</span>
+            <span class="balloon balloon3">🎂</span>
+        </div>
+        <h1>HBD Pendo!</h1>
+        <div class="warning-message">⚠️ sudah jo itu gamon gamon</div>
+        <p class="message" id="message"></p>
+        <div class="balloons">
+            <span class="balloon balloon1">🎈</span>
+            <span class="balloon balloon2">🎉</span>
+            <span class="balloon balloon3">🎂</span>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 'intro';
+
+        function nextStep(step) {
+            document.getElementById(currentStep).classList.remove('active');
+            document.getElementById(step).classList.add('active');
+            currentStep = step;
+
+            if (step === 'main') {
+                startMainPage();
+            }
+        }
+
+        function checkAnswer(answer) {
+            // For demo, assume Wednesday is correct. You can change this.
+            if (answer === 'Wednesday') {
+                alert('Benar! Bagus sekali!');
+                nextStep('step2');
+            } else {
+                alert('Ups! Coba lagi.');
+            }
+        }
+
+        // Moving button logic
+        let clickCount = 0;
+        const movingBtn = document.getElementById('movingBtn');
+        movingBtn.addEventListener('click', function() {
+            clickCount++;
+            if (clickCount < 3) {
+                moveButton();
+            } else {
+                // After 3 clicks, allow success
+                nextStep('main');
+            }
+        });
+
+        function moveButton() {
+            const maxX = window.innerWidth - 200;
+            const maxY = window.innerHeight - 100;
+            const newX = Math.random() * maxX;
+            const newY = Math.random() * maxY;
+            movingBtn.style.left = newX + 'px';
+            movingBtn.style.top = newY + 'px';
+        }
+
+        function startMainPage() {
+            // Text-to-speech
+            const speechText = "HBD Pendo! ⚠️ sudah jo itu gamon gamon Semoga ulang tahunmu penuh dengan kegembiraan, tawa, dan kebahagiaan yang tak terbatas!";
+            speakText(speechText);
+
+            // Typewriter effect
+            const messageElement = document.getElementById('message');
+            const fullMessage = "Semoga ulang tahunmu penuh dengan kegembiraan, tawa, dan kebahagiaan yang tak terbatas!";
+            let index = 0;
+
+            function typeWriter() {
+                if (index < fullMessage.length) {
+                    messageElement.innerHTML += fullMessage.charAt(index);
+                    index++;
+                    setTimeout(typeWriter, 50);
+                }
+            }
+
+            typeWriter();
+            createConfetti();
+
+            // Clickable balloons
+            document.querySelectorAll('.balloon').forEach(balloon => {
+                balloon.addEventListener('click', function() {
+                    this.style.transform = 'scale(0)';
+                    setTimeout(() => {
+                        this.style.display = 'none';
+                    }, 300);
+                });
+            });
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'id-ID'; // Indonesian language
+                utterance.rate = 0.8; // Slightly slower speed
+                utterance.pitch = 1; // Normal pitch
+                utterance.volume = 1; // Full volume
+
+                // Wait for voices to load
+                function setVoice() {
+                    const voices = speechSynthesis.getVoices();
+                    const indonesianVoice = voices.find(voice => voice.lang.startsWith('id'));
+                    if (indonesianVoice) {
+                        utterance.voice = indonesianVoice;
+                    }
+                    speechSynthesis.speak(utterance);
+                }
+
+                if (speechSynthesis.getVoices().length > 0) {
+                    setVoice();
+                } else {
+                    speechSynthesis.onvoiceschanged = setVoice;
+                }
+            } else {
+                console.log('Text-to-speech not supported in this browser.');
+            }
+        }
+
+        // Confetti effect
+        function createConfetti() {
+            const colors = ['#ffd700', '#ff69b4', '#00ced1', '#ff6347', '#32cd32'];
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 3 + 's';
+                    document.body.appendChild(confetti);
+
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 3000);
+                }, i * 20);
+            }
+        }
+    </script>
+</body>
+</html>
